@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ubt-web
+  labels:
+    app: ubt-web
+    version: v1.0
+spec:
+  containers:
+  - name: ubt-web
+    image: ubt/demo:1.0
+    imagePullPolicy: Never
+    ports:
+    - containerPort: 8000

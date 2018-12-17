@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ubt-web-dp
+  labels:
+    app: ubt-web
+    version: v1.0
+spec:
+  replicas: 5
+  minReadySeconds: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: ubt-web
+  template:
+    metadata:
+      labels:
+        app: ubt-web
+        version: v1.0
+    spec:
+      containers:
+      - name: ubt-web
+        image: ubt/demo:1.0
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8000

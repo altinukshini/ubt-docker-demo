@@ -1,9 +1,9 @@
 FROM python:3.5-alpine
 
-ADD . /code
+ADD web /web
 
-WORKDIR /code
+WORKDIR /web
 
-RUN pip install -r requirements.txt
+RUN pip install flask
 
 CMD ["python", "app.py"]

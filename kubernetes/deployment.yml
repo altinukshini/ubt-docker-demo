@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ubt-web-dp
+  labels:
+    app: ubt-web
+    version: v1.0
+spec:
+  replicas: 5
+  minReadySeconds: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: ubt-web
+  template:
+    metadata:
+      labels:
+        app: ubt-web
+        version: v1.0
+    spec:
+      containers:
+      - name: ubt-web
+        image: ubt/demo:1.0
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8000
+        # Kontrollo nese pod vazhdon te pranoj requests pa ndonje error brenda nje intervali kohore
+        livenessProbe:
+          httpGet:
+            path: /healthcheck
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        # Kontrollo nese pod ka startuar dhe eshte gati te pranoj requests
+        readinessProbe:
+          httpGet:
+            path: /healthcheck
+            port: 8000
+          initialDelaySeconds: 15
+          periodSeconds: 3
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-dp
+  labels:
+    app: redis
+spec:
+  selector:
+    matchLabels:
+      app: redis
+      role: master
+      tier: backend
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: redis
+        role: master
+        tier: backend
+    spec:
+      containers:
+      - name: master
+        image: redis:alpine
+        ports:
+        - containerPort: 6379

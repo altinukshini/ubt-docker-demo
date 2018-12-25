@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: ubt-web
+  name: ubt-web-pd
   labels:
     app: ubt-web
     version: v1.0
@@ -12,3 +12,18 @@ spec:
     imagePullPolicy: Never
     ports:
     - containerPort: 8000
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: redis-pd
+  labels:
+    app: redis
+    role: master
+    tier: backend
+spec:
+  containers:
+  - name: master
+    image: redis:alpine
+    ports:
+    - containerPort: 6379

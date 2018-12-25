@@ -2,7 +2,11 @@ version: '3'
 
 services:
   web:
-    image: ubt/demo
+    image: ubt/demo:1.0
     build: .
     ports:
       - "8000:8000"
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
